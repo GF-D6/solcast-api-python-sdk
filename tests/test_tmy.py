@@ -23,7 +23,7 @@ def test_rooftop_pv_power():
 def test_fail_rooftop_pv_power():
     lats, longs = load_test_locations_coordinates()
 
-    res = tmy.rooftop_pv_power(latitude=lats[0], longitude=longs[0], array_type="wrong")
+    res = tmy.rooftop_pv_power(latitude=lats[0], longitude=longs[0], array_type="wrong", capacity=3)
 
     assert res.success is False
     assert res.code == 400
