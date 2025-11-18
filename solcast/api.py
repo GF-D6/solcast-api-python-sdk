@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from urllib.request import urlopen, Request
 import urllib.parse
 import urllib.error
-from typing import Optional, Self
+from typing import Optional, Self, Tuple
 
 import solcast
 
@@ -90,7 +90,7 @@ class Client:
         self.url = self.make_url()
 
     @staticmethod
-    def _check_params(params: dict) -> (dict, str):
+    def _check_params(params: dict) -> Tuple[dict, str]:
         """Run basic checks on the parameters that will be passed to the HTTP request."""
         assert isinstance(params, dict), "parameters needs to be a dict"
         params = copy.deepcopy(params)
