@@ -11,10 +11,13 @@
 **Documentation**: <a href="https://solcast.github.io/solcast-api-python-sdk/" target="_blank">https://solcast.github.io/solcast-api-python-sdk/ </a>
 
 ## Install
+
 ```commandline
 pip install solcast
 ```
-or from source: 
+
+or from source:
+
 ```commandline
 git clone https://github.com/Solcast/solcast-api-python-sdk.git
 cd solcast-api-python-sdk
@@ -22,7 +25,8 @@ pip install .
 ```
 
 The vanilla version doesn't have any dependency. For full functionality,
-for example for getting the data into `DataFrames`, and for development, use the `[all]` tag: 
+for example for getting the data into `DataFrames`, and for development, use the `[all]` tag:
+
 ```commandline
 pip install .[all] for the dev libs
 ```
@@ -39,13 +43,14 @@ df = live.radiation_and_weather(
 ).to_pandas()
 ```
 
-Don't forget to set your [account Api Key](https://toolkit.solcast.com.au/register) with: 
-```export SOLCAST_API_KEY={your commercial api_key}```
+Don't forget to set your [account Api Key](https://toolkit.solcast.com.au/register) with:
+`export SOLCAST_API_KEY={your commercial api_key}`
 
 ---
 
 ## Contributing
-Tests are run against the Solcast API, you will need an API key to run them. 
+
+Tests are run against the Solcast API, you will need an API key to run them.
 They are executed on `unmetered locations` and as such won't consume your requests.
 
 ```commandline
