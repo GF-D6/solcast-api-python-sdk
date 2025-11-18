@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from urllib.request import urlopen, Request
 import urllib.parse
 import urllib.error
-from typing import Optional
+from typing import Optional, Self
 
 import solcast
 
@@ -37,6 +37,9 @@ class Response:
         if self.code == 204:  # Case of valid no content
             return dict()
         return json.loads(self.data)
+
+    def __call__(self, *args, **kwargs) -> Self:
+        return type(self)(*args, **kwargs)
 
 
 class PandafiableResponse(Response):
