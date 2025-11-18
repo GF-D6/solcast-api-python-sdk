@@ -228,7 +228,7 @@ class Client:
         except urllib.error.HTTPError as e:
             try:
                 exception_message = json.loads(e.read())["response_status"]["message"]
-            except:
+            except Exception:
                 exception_message = "Undefined Error"
             return self.response(
                 code=e.code,
