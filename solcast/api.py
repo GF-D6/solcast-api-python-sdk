@@ -1,11 +1,11 @@
 import copy
 import json
 import os
-from dataclasses import dataclass
-from urllib.request import urlopen, Request
-import urllib.parse
 import urllib.error
+import urllib.parse
+from dataclasses import dataclass
 from typing import Optional, Self, Tuple
+from urllib.request import Request, urlopen
 
 import solcast
 

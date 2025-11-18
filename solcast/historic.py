@@ -1,9 +1,9 @@
 from .api import Client, PandafiableResponse
 from .urls import (
     base_url,
+    historic_advanced_pv_power,
     historic_radiation_and_weather,
     historic_rooftop_pv_power,
-    historic_advanced_pv_power,
 )
 
 

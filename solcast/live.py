@@ -3,9 +3,9 @@ from typing import List
 from .api import Client, PandafiableResponse
 from .urls import (
     base_url,
+    live_advanced_pv_power,
     live_radiation_and_weather,
     live_rooftop_pv_power,
-    live_advanced_pv_power,
 )
 
 

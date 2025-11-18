@@ -1,11 +1,11 @@
+import pandas as pd
 import pytest
 
 from solcast import historic
 from solcast.unmetered_locations import (
-    load_test_locations_coordinates,
     UNMETERED_LOCATIONS,
+    load_test_locations_coordinates,
 )
-import pandas as pd
 
 
 def test_radiation_and_weather():

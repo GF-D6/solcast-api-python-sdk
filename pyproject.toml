@@ -61,3 +61,6 @@ junit_family = "xunit2"
 parallel = true
 source = ["docs", "tests", "solcast"]
 context = '${CONTEXT}'
+
+[dependency-groups]
+lint = ["black>=24.8.0", "isort>=5.13.2"]

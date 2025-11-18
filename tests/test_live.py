@@ -1,7 +1,7 @@
 from solcast import live
 from solcast.unmetered_locations import (
-    load_test_locations_coordinates,
     UNMETERED_LOCATIONS,
+    load_test_locations_coordinates,
 )
 
 

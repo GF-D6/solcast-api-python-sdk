@@ -1,10 +1,11 @@
+import pytest
+
 from solcast.api import Client, PandafiableResponse, Response
 from solcast.urls import (
     base_url,
-    live_radiation_and_weather,
     historic_radiation_and_weather,
+    live_radiation_and_weather,
 )
-import pytest
 
 
 @pytest.fixture
