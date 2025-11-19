@@ -163,7 +163,6 @@ def soiling_kimber(
     start: str,
     end: Optional[str] = None,
     duration: Optional[str] = None,
-    base_url=base_url,
     **kwargs,
 ) -> PandafiableResponse:
     """Get hourly historical soiling loss using the Kimber model.
@@ -177,23 +176,20 @@ def soiling_kimber(
         start: Datetime-like (YYYY-MM-DD or ISO8601) start of period.
         end: Optional, end of requested period (mutually exclusive with duration).
         duration: Optional, ISO8601 duration within 31 days of start (mutually exclusive with end).
-        base_url: API base URL override (normally leave as default).
         **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
 
     Returns:
         PandafiableResponse: Response object; call `.to_pandas()` for a DataFrame.
 
-    Notes:
-        - Fixed hourly period (PT60M) is used.
-        - Provide either end OR duration.
-        - See https://docs.solcast.com.au/ for full parameter details.
+    See https://docs.solcast.com.au/ for full parameter details.
     """
     assert (end is None and duration is not None) | (
         duration is None and end is not None
     ), "only one of duration or end"
 
+    url = kwargs.get("base_url", base_url)
     client = Client(
-        base_url=base_url,
+        base_url=url,
         endpoint=historic_soiling_kimber,
         response_type=PandafiableResponse,  # type: ignore[arg-type]
     )
@@ -202,8 +198,6 @@ def soiling_kimber(
         "latitude": latitude,
         "longitude": longitude,
         "start": start,
-        "period": "PT60M",
-        "format": "json",
         **kwargs,
     }
 
@@ -235,23 +229,20 @@ def soiling_hsu(
         start: Datetime-like (YYYY-MM-DD or ISO8601) start of period.
         end: Optional, end of requested period (mutually exclusive with duration).
         duration: Optional, ISO8601 duration within 31 days of start (mutually exclusive with end).
-        base_url: API base URL override (normally leave as default).
         **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
 
     Returns:
         PandafiableResponse: Response object; call `.to_pandas()` for a DataFrame.
 
-    Notes:
-        - Fixed hourly period (PT60M) is used.
-        - Provide either end OR duration.
-        - See https://docs.solcast.com.au/ for full parameter details.
+    See https://docs.solcast.com.au/ for full parameter details.
     """
     assert (end is None and duration is not None) | (
         duration is None and end is not None
     ), "only one of duration or end"
 
+    url = kwargs.get("base_url", base_url)
     client = Client(
-        base_url=base_url,
+        base_url=url,
         endpoint=historic_soiling_hsu,
         response_type=PandafiableResponse,  # type: ignore[arg-type]
     )
@@ -260,8 +251,6 @@ def soiling_hsu(
         "latitude": latitude,
         "longitude": longitude,
         "start": start,
-        "period": "PT60M",
-        "format": "json",
         **kwargs,
     }
 

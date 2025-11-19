@@ -94,7 +94,6 @@ def advanced_pv_power(resource_id: int, **kwargs) -> PandafiableResponse:
 def soiling_hsu(
     latitude: float,
     longitude: float,
-    base_url=base_url,
     **kwargs,
 ):
     """Get hourly soiling loss using the HSU model.
@@ -105,20 +104,18 @@ def soiling_hsu(
     Args:
         latitude: Decimal degrees, between -90 and 90 (north positive).
         longitude: Decimal degrees, between -180 and 180 (east positive).
-        base_url: API base URL override (normally leave as default).
         **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
 
     Returns:
         PandafiableResponse: Response object; call `.to_pandas()` for a DataFrame.
 
-    Notes:
-        - Fixed hourly period (PT60M) is used.
-        - See https://docs.solcast.com.au/ for full parameter details.
+    See https://docs.solcast.com.au/ for full parameter details.
     """
     from solcast.urls import live_soiling_hsu
 
+    url = kwargs.get("base_url", base_url)
     client = Client(
-        base_url=base_url,
+        base_url=url,
         endpoint=live_soiling_hsu,
         response_type=PandafiableResponse,
     )
@@ -147,20 +144,18 @@ def soiling_kimber(
     Args:
         latitude: Decimal degrees, between -90 and 90 (north positive).
         longitude: Decimal degrees, between -180 and 180 (east positive).
-        base_url: API base URL override (normally leave as default).
         **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
 
     Returns:
         PandafiableResponse: Response object; call `.to_pandas()` for a DataFrame.
 
-    Notes:
-        - Fixed hourly period (PT60M) is used.
-        - See https://docs.solcast.com.au/ for full parameter details.
+    See https://docs.solcast.com.au/ for full parameter details.
     """
     from solcast.urls import live_soiling_kimber
 
+    url = kwargs.get("base_url", base_url)
     client = Client(
-        base_url=base_url,
+        base_url=url,
         endpoint=live_soiling_kimber,
         response_type=PandafiableResponse,  # type: ignore[arg-type]
     )
@@ -168,8 +163,6 @@ def soiling_kimber(
         {
             "latitude": latitude,
             "longitude": longitude,
-            "period": "PT60M",
-            "format": "json",
             **kwargs,
         }
     )
