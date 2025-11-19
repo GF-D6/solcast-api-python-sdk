@@ -104,20 +104,17 @@ def advanced_pv_power(resource_id: int, **kwargs) -> PandafiableResponse:
 def soiling_kimber(
     latitude: float,
     longitude: float,
-    manual_washdates=[],
     base_url=base_url,
     **kwargs,
 ) -> PandafiableResponse:
     """Get hourly soiling loss forecast using the Kimber model.
 
     Returns a time series of forecast cumulative soiling / cleanliness state for the
-    requested location based on Pvlib's Kimber model. You can optionally provide one
-    or more manual module wash dates to reset/adjust the soiling accumulation.
+    requested location based on Pvlib's Kimber model.
 
     Args:
         latitude: Decimal degrees, between -90 and 90 (north positive).
         longitude: Decimal degrees, between -180 and 180 (east positive).
-        manual_washdates: List of wash dates (YYYY-MM-DD strings) resetting soiling (empty if none).
         base_url: API base URL override (normally leave as default).
         **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
 
@@ -128,6 +125,7 @@ def soiling_kimber(
         - Fixed hourly period (PT60M) is used.
         - See https://docs.solcast.com.au/ for full parameter details.
     """
+
     client = Client(
         base_url=base_url,
         endpoint=forecast_soiling_kimber,
@@ -137,7 +135,6 @@ def soiling_kimber(
         {
             "latitude": latitude,
             "longitude": longitude,
-            "manual_washdates": manual_washdates,
             "period": "PT60M",
             "format": "json",
             **kwargs,
@@ -148,20 +145,17 @@ def soiling_kimber(
 def soiling_hsu(
     latitude: float,
     longitude: float,
-    manual_washdates=[],
     base_url=base_url,
     **kwargs,
 ) -> PandafiableResponse:
     """Get hourly soiling loss forecast using the HSU model.
 
     Returns a time series of forecast cumulative soiling / cleanliness state for the
-    requested location based on Solcast's HSU model. You can optionally provide one
-    or more manual module wash dates to reset/adjust the soiling accumulation.
+    requested location based on Solcast's HSU model.
 
     Args:
         latitude: Decimal degrees, between -90 and 90 (north positive).
         longitude: Decimal degrees, between -180 and 180 (east positive).
-        manual_washdates: List of wash dates (YYYY-MM-DD strings) resetting soiling (empty if none).
         base_url: API base URL override (normally leave as default).
         **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
 
@@ -181,7 +175,6 @@ def soiling_hsu(
         {
             "latitude": latitude,
             "longitude": longitude,
-            "manual_washdates": manual_washdates,
             "period": "PT60M",
             "format": "json",
             **kwargs,
