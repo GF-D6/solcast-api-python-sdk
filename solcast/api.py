@@ -27,7 +27,7 @@ class Response:
     def to_dict(self):
         if self.code not in [200, 204]:
             raise Exception(self.exception)
-        if self.code == 204 or not self.data:  # Case of valid no content
+        if self.code == 204:
             return dict()
         return json.loads(self.data)
 
