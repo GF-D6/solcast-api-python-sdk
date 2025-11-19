@@ -38,3 +38,25 @@ def test_advanced_pv_power():
         capacity=1,
     )
     assert res.success is True
+
+
+def test_soiling_kimber():
+    lats, longs = load_test_locations_coordinates()
+    res = forecast.soiling_kimber(
+        latitude=lats[0],
+        longitude=longs[0],
+        manual_washdates=["2024-01-01"],
+    )
+    assert res.success is True
+    assert res.to_dict()["forecasts"][0]["period"] == "PT60M"
+
+
+def test_soiling_hsu():
+    lats, longs = load_test_locations_coordinates()
+    res = forecast.soiling_hsu(
+        latitude=lats[1],
+        longitude=longs[1],
+        manual_washdates=[],
+    )
+    assert res.success is True
+    assert res.to_dict()["forecasts"][0]["period"] == "PT60M"

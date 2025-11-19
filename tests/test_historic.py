@@ -53,3 +53,32 @@ def test_advanced_pv_power():
     assert res.success is True
     assert len(res.to_dict()["estimated_actuals"]) == 3 * 48 + 1
     assert ~res.to_pandas().isna().any().all()
+
+
+def test_soiling_kimber():
+    lats, longs = load_test_locations_coordinates()
+    res = historic.soiling_kimber(
+        latitude=lats[2],
+        longitude=longs[2],
+        start="2022-10-25T14:45:00.00Z",
+        duration="P3D",
+        manual_washdates=["2022-10-01"],
+    )
+    assert res.success is True
+    # Ensure period PT60M
+    first = res.to_dict()["estimated_actuals"][0]
+    assert first["period"] == "PT60M"
+
+
+def test_soiling_hsu():
+    lats, longs = load_test_locations_coordinates()
+    res = historic.soiling_hsu(
+        latitude=lats[3],
+        longitude=longs[3],
+        start="2022-10-25T14:45:00.00Z",
+        duration="P3D",
+        manual_washdates=[],
+    )
+    assert res.success is True
+    first = res.to_dict()["estimated_actuals"][0]
+    assert first["period"] == "PT60M"

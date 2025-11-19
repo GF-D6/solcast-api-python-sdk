@@ -6,8 +6,8 @@ from .urls import (
     forecast_advanced_pv_power,
     forecast_radiation_and_weather,
     forecast_rooftop_pv_power,
-    forecast_soiling_kimber,
     forecast_soiling_hsu,
+    forecast_soiling_kimber,
 )
 
 

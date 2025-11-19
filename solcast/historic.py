@@ -6,8 +6,8 @@ from .urls import (
     historic_advanced_pv_power,
     historic_radiation_and_weather,
     historic_rooftop_pv_power,
-    historic_soiling_kimber,
     historic_soiling_hsu,
+    historic_soiling_kimber,
 )
 
 
@@ -111,7 +111,11 @@ def rooftop_pv_power(
 
 
 def advanced_pv_power(
-    resource_id: int, start: str, end: Optional[str] = None, duration: Optional[str] = None, **kwargs
+    resource_id: int,
+    start: str,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
+    **kwargs,
 ) -> PandafiableResponse:
     """
     Get historical high spec PV power estimated actuals for the requested site,
