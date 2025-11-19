@@ -4,7 +4,7 @@ import os
 import urllib.error
 import urllib.parse
 from dataclasses import dataclass
-from typing import Optional, Tuple, TypeVar
+from typing import Optional, Tuple
 from urllib.request import Request, urlopen
 
 import solcast
@@ -74,9 +74,6 @@ class PandafiableResponse(Response):
         return type(self)(*args, **kwargs)
 
 
-T_contra = TypeVar("T_contra", contravariant=True)
-
-
 class Client:
     """Handles all API get requests for the different endpoints."""
 
@@ -84,7 +81,7 @@ class Client:
         self,
         base_url: str,
         endpoint: str,
-        response_type: Response = PandafiableResponse,
+        response_type: Response,
     ):
         """
         Args:
@@ -144,7 +141,7 @@ class Client:
         """Compose the full URL."""
         return "/".join([self.base_url, self.endpoint])
 
-    def get(self, params: dict) -> PandafiableResponse:
+    def get(self, params: dict) -> Response:
         """Wrap _make_request to make a GET request
 
         Args:
@@ -204,7 +201,7 @@ class Client:
         """
         return self._make_request(params, method="DELETE")
 
-    def _make_request(self, params: dict, method: str) -> PandafiableResponse:
+    def _make_request(self, params: dict, method: str) -> Response:
         """Make a request using urllib with the HTTP method specified
 
         Args:
