@@ -56,3 +56,19 @@ They are executed on `unmetered locations` and as such won't consume your reques
 ```commandline
 pytest tests
 ```
+
+### Formatters and Linters
+
+| Language | Formatter/Linter |
+| -------- | ---------------- |
+| `yaml`   | `yamlls`         |
+| `toml`   | `taplo`          |
+| `python` | `black`          |
+
+### Recommended Python Development Version
+
+Develop on the oldest supported `Python` version.
+
+```bash
+uv python pin 3.8
+```
