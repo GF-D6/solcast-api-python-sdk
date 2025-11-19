@@ -38,15 +38,7 @@ Documentation = "https://solcast.github.io/solcast-api-python-sdk"
 Repository = "https://github.com/Solcast/solcast-api-python-sdk"
 
 [project.optional-dependencies]
-docs = [
-  "pytest",
-  "mkdocs",
-  "mkdocs-material",
-  "mkdocstrings[python]==0.25",
-  "mkdocs-jupyter",
-  "kaleido",
-]
-all = ["notebook", "matplotlib", "pandas", "black", "solcast[docs]"]
+all = ["notebook", "matplotlib", "pandas"]
 
 [tool.hatch.version]
 path = "solcast/__init__.py"
@@ -63,4 +55,12 @@ source = ["docs", "tests", "solcast"]
 context = '${CONTEXT}'
 
 [dependency-groups]
+docs = [
+  "kaleido>=1.2.0",
+  "mkdocs>=1.6.1",
+  "mkdocs-jupyter>=0.24.8",
+  "mkdocs-material>=9.7.0",
+  "mkdocstrings[python]==0.25",
+]
 lint = ["black>=24.8.0", "isort>=5.13.2"]
+test = ["pytest>=8.3.5"]
