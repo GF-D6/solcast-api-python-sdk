@@ -4,17 +4,10 @@ import os
 import urllib.error
 import urllib.parse
 from dataclasses import dataclass
-from typing import Optional, Self, Tuple
+from typing import Optional, Tuple, TypeVar
 from urllib.request import Request, urlopen
 
 import solcast
-
-try:
-    import pandas as pd
-except ImportError:
-    _PANDAS = False
-else:
-    _PANDAS = True
 
 
 @dataclass
@@ -38,7 +31,7 @@ class Response:
             return dict()
         return json.loads(self.data)
 
-    def __call__(self, *args, **kwargs) -> Self:
+    def __call__(self, *args, **kwargs) -> "Response":
         return type(self)(*args, **kwargs)
 
 
@@ -51,9 +44,13 @@ class PandafiableResponse(Response):
         like casting the datetime columns and setting them as index.
         """
         # not ideal to run this for every Response
-        assert _PANDAS, ImportError(
-            "Pandas needs to be installed for this functionality."
-        )
+
+        try:
+            import pandas as pd
+        except ImportError as e:
+            raise ImportError(
+                f"Pandas needs to be installed for this functionality. {e}"
+            )
 
         if self.code != 200:
             raise Exception(self.exception)
@@ -66,18 +63,29 @@ class PandafiableResponse(Response):
 
         # to make it work with different Pandas versions
         if dfs.index.tz is None:
-            dfs.index.tz = "UTC"
+            dfs.index = dfs.index.tz_localize("UTC")
 
         dfs.index.name = "period_end"
         dfs = dfs.drop(columns=["period_end", "period"])
 
         return dfs
 
+    def __call__(self, *args, **kwargs) -> "PandafiableResponse":
+        return type(self)(*args, **kwargs)
+
+
+T_contra = TypeVar("T_contra", contravariant=True)
+
 
 class Client:
     """Handles all API get requests for the different endpoints."""
 
-    def __init__(self, base_url: str, endpoint: str, response_type: Response):
+    def __init__(
+        self,
+        base_url: str,
+        endpoint: str,
+        response_type: Response = PandafiableResponse,
+    ):
         """
         Args:
             base_url: the base URL to Solcast API
@@ -136,7 +144,7 @@ class Client:
         """Compose the full URL."""
         return "/".join([self.base_url, self.endpoint])
 
-    def get(self, params: dict) -> Response:
+    def get(self, params: dict) -> PandafiableResponse:
         """Wrap _make_request to make a GET request
 
         Args:
@@ -196,7 +204,7 @@ class Client:
         """
         return self._make_request(params, method="DELETE")
 
-    def _make_request(self, params: dict, method: str) -> Response:
+    def _make_request(self, params: dict, method: str) -> PandafiableResponse:
         """Make a request using urllib with the HTTP method specified
 
         Args:
