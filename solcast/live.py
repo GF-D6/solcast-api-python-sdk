@@ -123,7 +123,6 @@ def soiling_hsu(
         {
             "latitude": latitude,
             "longitude": longitude,
-            "period": "PT60M",
             "format": "json",
             **kwargs,
         }
@@ -163,6 +162,7 @@ def soiling_kimber(
         {
             "latitude": latitude,
             "longitude": longitude,
+            "format": "json",
             **kwargs,
         }
     )

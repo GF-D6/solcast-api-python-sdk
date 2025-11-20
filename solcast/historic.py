@@ -146,6 +146,7 @@ def advanced_pv_power(
         "resource_id": resource_id,
         "start": start,
         "format": "json",
+        "format": "json",
         **kwargs,
     }
 
@@ -198,6 +199,7 @@ def soiling_kimber(
         "latitude": latitude,
         "longitude": longitude,
         "start": start,
+        "format": "json",
         **kwargs,
     }
 

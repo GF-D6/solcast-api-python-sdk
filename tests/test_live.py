@@ -1,3 +1,4 @@
+import pandas as pd
 from solcast import live
 from solcast.unmetered_locations import (
     UNMETERED_LOCATIONS,
@@ -49,7 +50,10 @@ def test_soiling_kimber_live():
         manual_washdates=["2024-01-01"],
     )
     assert res.success is True
-    assert res.to_dict()["estimated_actuals"][0]["period"] == "PT60M"
+    assert res.to_dict()["estimated_actuals"][0]["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
 
 
 def test_soiling_hsu_live():
@@ -57,7 +61,9 @@ def test_soiling_hsu_live():
     res = live.soiling_hsu(
         latitude=lats[1],
         longitude=longs[1],
-        manual_washdates=[],
     )
     assert res.success is True
-    assert res.to_dict()["estimated_actuals"][0]["period"] == "PT60M"
+    assert res.to_dict()["estimated_actuals"][0]["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0

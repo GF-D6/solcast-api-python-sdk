@@ -65,9 +65,11 @@ def test_soiling_kimber():
         manual_washdates=["2022-10-01"],
     )
     assert res.success is True
-    # Ensure period PT60M
     first = res.to_dict()["estimated_actuals"][0]
-    assert first["period"] == "PT60M"
+    assert first["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
 
 
 def test_soiling_hsu():
@@ -77,8 +79,10 @@ def test_soiling_hsu():
         longitude=longs[3],
         start="2022-10-25T14:45:00.00Z",
         duration="P3D",
-        manual_washdates=[],
     )
     assert res.success is True
     first = res.to_dict()["estimated_actuals"][0]
-    assert first["period"] == "PT60M"
+    assert first["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
