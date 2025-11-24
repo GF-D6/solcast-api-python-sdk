@@ -19,10 +19,10 @@ jobs:
       - name: Install dependencies with uv
         run: |
           uv python install ${{ matrix.python-version }}
-          uv sync --python ${{ matrix.python-version }} --extra all
+          uv sync --python ${{ matrix.python-version }} --extra all --all-groups
 
       - name: Test with pytest
         env:
           SOLCAST_API_KEY: ${{ secrets.SOLCAST_API_KEY }}
         run: |
-          uv run --python ${{ matrix.python-version }} pytest tests
+          uv run --python ${{ matrix.python-version }} --group test pytest tests
