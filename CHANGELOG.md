@@ -1,9 +1,12 @@
 # Changelog
 
+## [1.3.1] - 2025-11-19
+
+- Add the `Kimber` and `HSU` to live, forecast, and historic module
+
 ## [1.3.0] - 2024-07-10
 
-- Add the `aggregations` module. No tests as we are yet to expose unmetered aggregations. 
-
+- Add the `aggregations` module. No tests as we are yet to expose unmetered aggregations.
 
 ## [1.2.5] - 2024-07-05
 

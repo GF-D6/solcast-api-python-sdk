@@ -1,11 +1,7 @@
 from typing import Optional
 
 from .api import Client, PandafiableResponse
-from .urls import (
-    base_url,
-    forecast_grid_aggregations,
-    live_grid_aggregations,
-)
+from .urls import base_url, forecast_grid_aggregations, live_grid_aggregations
 
 
 def live(

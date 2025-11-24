@@ -1,9 +1,13 @@
+from typing import Optional
+
 from .api import Client, PandafiableResponse
 from .urls import (
     base_url,
+    historic_advanced_pv_power,
     historic_radiation_and_weather,
     historic_rooftop_pv_power,
-    historic_advanced_pv_power,
+    historic_soiling_hsu,
+    historic_soiling_kimber,
 )
 
 
@@ -11,8 +15,8 @@ def radiation_and_weather(
     latitude: float,
     longitude: float,
     start: str,
-    end: str = None,
-    duration: str = None,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
     **kwargs,
 ) -> PandafiableResponse:
     """
@@ -36,7 +40,7 @@ def radiation_and_weather(
     client = Client(
         base_url=base_url,
         endpoint=historic_radiation_and_weather,
-        response_type=PandafiableResponse,
+        response_type=PandafiableResponse,  # type: ignore[arg-type]
     )
 
     params = {
@@ -59,8 +63,8 @@ def rooftop_pv_power(
     latitude: float,
     longitude: float,
     start: str,
-    end: str = None,
-    duration: str = None,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
     **kwargs,
 ) -> PandafiableResponse:
     """
@@ -83,7 +87,7 @@ def rooftop_pv_power(
     client = Client(
         base_url=base_url,
         endpoint=historic_rooftop_pv_power,
-        response_type=PandafiableResponse,
+        response_type=PandafiableResponse,  # type: ignore[arg-type]
     )
 
     assert (end is None and duration is not None) | (
@@ -107,7 +111,11 @@ def rooftop_pv_power(
 
 
 def advanced_pv_power(
-    resource_id: int, start: str, end: str = None, duration: str = None, **kwargs
+    resource_id: int,
+    start: str,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
+    **kwargs,
 ) -> PandafiableResponse:
     """
     Get historical high spec PV power estimated actuals for the requested site,
@@ -127,7 +135,7 @@ def advanced_pv_power(
     client = Client(
         base_url=base_url,
         endpoint=historic_advanced_pv_power,
-        response_type=PandafiableResponse,
+        response_type=PandafiableResponse,  # type: ignore[arg-type]
     )
 
     assert (end is None and duration is not None) | (
@@ -136,6 +144,114 @@ def advanced_pv_power(
 
     params = {
         "resource_id": resource_id,
+        "start": start,
+        "format": "json",
+        "format": "json",
+        **kwargs,
+    }
+
+    if end is not None:
+        params["end"] = end
+    if duration is not None:
+        params["duration"] = duration
+
+    return client.get(params)
+
+
+def soiling_kimber(
+    latitude: float,
+    longitude: float,
+    start: str,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
+    **kwargs,
+) -> PandafiableResponse:
+    """Get hourly historical soiling loss using the Kimber model.
+
+    Returns a time series of estimated historical cumulative soiling / cleanliness state
+    for the requested location based on Pvlib's Kimber model.
+
+    Args:
+        latitude: Decimal degrees, between -90 and 90 (north positive).
+        longitude: Decimal degrees, between -180 and 180 (east positive).
+        start: Datetime-like (YYYY-MM-DD or ISO8601) start of period.
+        end: Optional, end of requested period (mutually exclusive with duration).
+        duration: Optional, ISO8601 duration within 31 days of start (mutually exclusive with end).
+        **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
+
+    Returns:
+        PandafiableResponse: Response object; call `.to_pandas()` for a DataFrame.
+
+    See https://docs.solcast.com.au/ for full parameter details.
+    """
+    assert (end is None and duration is not None) | (
+        duration is None and end is not None
+    ), "only one of duration or end"
+
+    url = kwargs.get("base_url", base_url)
+    client = Client(
+        base_url=url,
+        endpoint=historic_soiling_kimber,
+        response_type=PandafiableResponse,  # type: ignore[arg-type]
+    )
+
+    params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "start": start,
+        "format": "json",
+        **kwargs,
+    }
+
+    if end is not None:
+        params["end"] = end
+    if duration is not None:
+        params["duration"] = duration
+
+    return client.get(params)
+
+
+def soiling_hsu(
+    latitude: float,
+    longitude: float,
+    start: str,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
+    base_url=base_url,
+    **kwargs,
+) -> PandafiableResponse:
+    """Get hourly historical soiling loss using the HSU model.
+
+    Returns a time series of estimated historical cumulative soiling / cleanliness state
+    for the requested location based on Solcast's HSU model.
+
+    Args:
+        latitude: Decimal degrees, between -90 and 90 (north positive).
+        longitude: Decimal degrees, between -180 and 180 (east positive).
+        start: Datetime-like (YYYY-MM-DD or ISO8601) start of period.
+        end: Optional, end of requested period (mutually exclusive with duration).
+        duration: Optional, ISO8601 duration within 31 days of start (mutually exclusive with end).
+        **kwargs: Additional query parameters accepted by the endpoint (e.g. depo_veloc_pm10, initial_soiling).
+
+    Returns:
+        PandafiableResponse: Response object; call `.to_pandas()` for a DataFrame.
+
+    See https://docs.solcast.com.au/ for full parameter details.
+    """
+    assert (end is None and duration is not None) | (
+        duration is None and end is not None
+    ), "only one of duration or end"
+
+    url = kwargs.get("base_url", base_url)
+    client = Client(
+        base_url=url,
+        endpoint=historic_soiling_hsu,
+        response_type=PandafiableResponse,  # type: ignore[arg-type]
+    )
+
+    params = {
+        "latitude": latitude,
+        "longitude": longitude,
         "start": start,
         "format": "json",
         **kwargs,

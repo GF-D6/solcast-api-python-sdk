@@ -1,20 +1,13 @@
 import copy
 import json
 import os
-from dataclasses import dataclass
-from urllib.request import urlopen, Request
-import urllib.parse
 import urllib.error
-from typing import Optional
+import urllib.parse
+from dataclasses import dataclass
+from typing import Optional, Tuple
+from urllib.request import Request, urlopen
 
 import solcast
-
-try:
-    import pandas as pd
-except ImportError:
-    _PANDAS = False
-else:
-    _PANDAS = True
 
 
 @dataclass
@@ -34,9 +27,12 @@ class Response:
     def to_dict(self):
         if self.code not in [200, 204]:
             raise Exception(self.exception)
-        if self.code == 204:  # Case of valid no content
+        if self.code == 204:
             return dict()
         return json.loads(self.data)
+
+    def __call__(self, *args, **kwargs) -> "Response":
+        return type(self)(*args, **kwargs)
 
 
 class PandafiableResponse(Response):
@@ -48,9 +44,13 @@ class PandafiableResponse(Response):
         like casting the datetime columns and setting them as index.
         """
         # not ideal to run this for every Response
-        assert _PANDAS, ImportError(
-            "Pandas needs to be installed for this functionality."
-        )
+
+        try:
+            import pandas as pd
+        except ImportError as e:
+            raise ImportError(
+                f"Pandas needs to be installed for this functionality. {e}"
+            )
 
         if self.code != 200:
             raise Exception(self.exception)
@@ -63,18 +63,26 @@ class PandafiableResponse(Response):
 
         # to make it work with different Pandas versions
         if dfs.index.tz is None:
-            dfs.index.tz = "UTC"
+            dfs.index = dfs.index.tz_localize("UTC")
 
         dfs.index.name = "period_end"
         dfs = dfs.drop(columns=["period_end", "period"])
 
         return dfs
 
+    def __call__(self, *args, **kwargs) -> "PandafiableResponse":
+        return type(self)(*args, **kwargs)
+
 
 class Client:
     """Handles all API get requests for the different endpoints."""
 
-    def __init__(self, base_url: str, endpoint: str, response_type: Response):
+    def __init__(
+        self,
+        base_url: str,
+        endpoint: str,
+        response_type: Response,
+    ):
         """
         Args:
             base_url: the base URL to Solcast API
@@ -87,7 +95,7 @@ class Client:
         self.url = self.make_url()
 
     @staticmethod
-    def _check_params(params: dict) -> (dict, str):
+    def _check_params(params: dict) -> Tuple[dict, str]:
         """Run basic checks on the parameters that will be passed to the HTTP request."""
         assert isinstance(params, dict), "parameters needs to be a dict"
         params = copy.deepcopy(params)
@@ -225,7 +233,7 @@ class Client:
         except urllib.error.HTTPError as e:
             try:
                 exception_message = json.loads(e.read())["response_status"]["message"]
-            except:
+            except Exception:
                 exception_message = "Undefined Error"
             return self.response(
                 code=e.code,

@@ -1,4 +1,7 @@
 public
+dist
+uv.lock
+.python-version
 .idea
 *.ipynb_checkpoints
 .pytest_cache

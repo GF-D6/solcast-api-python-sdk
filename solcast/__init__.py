@@ -1,15 +1,13 @@
-__version__ = "1.3.0"
+__version__ = "1.3.1"
 
 from . import (
-    api,
+    aggregations,
     forecast,
     historic,
     live,
-    tmy,
-    aggregations,
-    unmetered_locations,
-    urls,
     pv_power_sites,
+    tmy,
+    unmetered_locations,
 )
 
 __all__ = [

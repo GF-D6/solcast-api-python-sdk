@@ -1,7 +1,8 @@
+import pandas as pd
 from solcast import live
 from solcast.unmetered_locations import (
-    load_test_locations_coordinates,
     UNMETERED_LOCATIONS,
+    load_test_locations_coordinates,
 )
 
 
@@ -30,7 +31,7 @@ def test_fail_rooftop_pv_power():
     res = live.rooftop_pv_power(latitude=lats[0], longitude=longs[0])
     assert res.success is False
     assert res.code == 400
-    assert res.exception == "'Capacity' must be greater than '0'."
+    assert res.exception == "'capacity' must be greater than '0'."
 
 
 def test_advanced_pv_power():
@@ -39,3 +40,30 @@ def test_advanced_pv_power():
     )
 
     assert res.success is True
+
+
+def test_soiling_kimber_live():
+    lats, longs = load_test_locations_coordinates()
+    res = live.soiling_kimber(
+        latitude=lats[0],
+        longitude=longs[0],
+        manual_washdates=["2024-01-01"],
+    )
+    assert res.success is True
+    assert res.to_dict()["estimated_actuals"][0]["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
+
+
+def test_soiling_hsu_live():
+    lats, longs = load_test_locations_coordinates()
+    res = live.soiling_hsu(
+        latitude=lats[1],
+        longitude=longs[1],
+    )
+    assert res.success is True
+    assert res.to_dict()["estimated_actuals"][0]["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0

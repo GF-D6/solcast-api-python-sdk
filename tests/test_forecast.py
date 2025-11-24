@@ -1,7 +1,8 @@
+import pandas as pd
 from solcast import forecast
 from solcast.unmetered_locations import (
-    load_test_locations_coordinates,
     UNMETERED_LOCATIONS,
+    load_test_locations_coordinates,
 )
 
 
@@ -38,3 +39,30 @@ def test_advanced_pv_power():
         capacity=1,
     )
     assert res.success is True
+
+
+def test_soiling_kimber():
+    lats, longs = load_test_locations_coordinates()
+    res = forecast.soiling_kimber(
+        latitude=lats[0],
+        longitude=longs[0],
+        manual_washdates=["2024-01-01"],
+    )
+    assert res.success is True
+    assert res.to_dict()["forecasts"][0]["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
+
+
+def test_soiling_hsu():
+    lats, longs = load_test_locations_coordinates()
+    res = forecast.soiling_hsu(
+        latitude=lats[1],
+        longitude=longs[1],
+    )
+    assert res.success is True
+    assert res.to_dict()["forecasts"][0]["period"] == "PT30M"
+    df = res.to_pandas()
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] > 0
