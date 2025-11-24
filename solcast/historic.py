@@ -253,6 +253,7 @@ def soiling_hsu(
         "latitude": latitude,
         "longitude": longitude,
         "start": start,
+        "format": "json",
         **kwargs,
     }
 
