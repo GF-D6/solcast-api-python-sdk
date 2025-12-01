@@ -113,7 +113,7 @@ def soiling_hsu(
     """
     from solcast.urls import live_soiling_hsu
 
-    url = kwargs.get("base_url", base_url)
+    url = kwargs.pop("base_url", base_url)
     client = Client(
         base_url=url,
         endpoint=live_soiling_hsu,
@@ -152,7 +152,7 @@ def soiling_kimber(
     """
     from solcast.urls import live_soiling_kimber
 
-    url = kwargs.get("base_url", base_url)
+    url = kwargs.pop("base_url", base_url)
     client = Client(
         base_url=url,
         endpoint=live_soiling_kimber,
