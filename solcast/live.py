@@ -95,7 +95,7 @@ def soiling_hsu(
     latitude: float,
     longitude: float,
     **kwargs,
-):
+) -> PandafiableResponse:
     """Get hourly soiling loss using the HSU model.
 
     Returns a time series of estimated cumulative soiling / cleanliness state for the
