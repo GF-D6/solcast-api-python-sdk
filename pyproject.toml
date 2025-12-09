@@ -40,7 +40,18 @@ Documentation = "https://solcast.github.io/solcast-api-python-sdk"
 Repository = "https://github.com/Solcast/solcast-api-python-sdk"
 
 [project.optional-dependencies]
-all = ["notebook", "matplotlib", "pandas", "pvlib", "folium"]
+all = [
+  "pandas",
+  "notebook",
+  "numpy",
+  "matplotlib",
+  "plotly",
+  "kaleido",
+  "folium",
+  "pvlib",
+  "pvanalytics",
+  "scipy"
+]
 
 [tool.hatch.version]
 path = "solcast/__init__.py"
