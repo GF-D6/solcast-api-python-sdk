@@ -65,7 +65,6 @@ class PandafiableResponse(Response):
         >>> response.to_pandas()
     """
 
-
     def to_pandas(self):
         """Return the data as a Pandas DataFrame with a DatetimeIndex."""
         # not ideal to run this for every Response
